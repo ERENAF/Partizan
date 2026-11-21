@@ -1,29 +1,51 @@
 using System;
 using UnityEngine;
 
-public abstract class Attack : MonoBehaviour
+[Serializable]
+public abstract class Attack
 {
     [Header("Attack")]
-    [SerializeField,Min(0)] protected float attackDistance;
-    [SerializeField,Min(0)] protected float damage = 25f;
+    [SerializeField, Min(0f)] protected float attackDistance = 1.5f;
+    [SerializeField] protected float angleOffset;
 
     [Header("Layers")]
-    [SerializeField] private LayerMask targetMask;
-    [SerializeField] private LayerMask obstacleMask;
+    [SerializeField] protected LayerMask targetMask;
+    [SerializeField] protected LayerMask obstacleMask;
 
-    public abstract void Execute();
-    public abstract bool TryGetTarget(out Collider2D target);
-    protected bool TryRaycast(Vector2 direction, out Collider2D target)
+    public abstract void Execute(Transform origin);
+
+    public abstract bool TryGetTarget(
+        Transform origin,
+        out Collider2D target
+    );
+
+    protected Vector2 GetDirection(Transform origin, float angle = 0f)
+    {
+        float rotation = origin.eulerAngles.z + angleOffset + angle;
+        float radians = rotation * Mathf.Deg2Rad;
+
+        return new Vector2(
+            Mathf.Cos(radians),
+            Mathf.Sin(radians)
+        );
+    }
+
+    protected bool TryRaycast(
+        Transform origin,
+        Vector2 direction,
+        out Collider2D target
+    )
     {
         RaycastHit2D hit = Physics2D.Raycast(
-            transform.position,
-            direction.normalized,
+            origin.position,
+            direction,
             attackDistance,
-            targetMask.value | obstacleMask.value
+            targetMask | obstacleMask
         );
 
         target = hit.collider;
 
-        return target != null && (targetMask.value & (1 << target.gameObject.layer)) != 0;
+        return target != null &&
+            (targetMask.value & (1 << target.gameObject.layer)) != 0;
     }
 }

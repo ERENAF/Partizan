@@ -3,30 +3,46 @@ using UnityEngine.InputSystem;
 
 public class PlayerAttack : MonoBehaviour
 {
-    [SerializeField] private Attack meleeAttack;
-    [SerializeField] private Attack rangeAttack;
+    [Header("Attack")]
+    [SerializeField] private MeleeAttack meleeAttack = new();
 
-    [SerializeField] private InputActionReference meleeAction;
-    [SerializeField] private InputActionReference rangeAction;
+    [Header("References")]
+    [SerializeField] private Transform attackOrigin;
+    [SerializeField] private InputActionReference attackAction;
+
+    private void Awake()
+    {
+        if (attackOrigin == null)
+            attackOrigin = transform;
+    }
 
     private void OnEnable()
     {
-        meleeAction.action.Enable();
-        rangeAction.action.Enable();
+        attackAction.action.Enable();
     }
 
     private void OnDisable()
     {
-        meleeAction.action.Disable();
-        rangeAction.action.Disable();
+        attackAction.action.Disable();
     }
 
     private void Update()
     {
-        if (meleeAction.action.WasPressedThisFrame())
-            meleeAttack.Execute();
+        if (attackAction.action.WasPressedThisFrame())
+        {
+            meleeAttack.Execute(attackOrigin);
+        }
+    }
 
-        if (rangeAction.action.WasPressedThisFrame())
-            rangeAttack.Execute();
+    private void OnDrawGizmosSelected()
+    {
+        if (meleeAttack == null)
+            return;
+
+        Transform origin = attackOrigin != null
+            ? attackOrigin
+            : transform;
+
+        meleeAttack.DrawGizmos(origin);
     }
 }
