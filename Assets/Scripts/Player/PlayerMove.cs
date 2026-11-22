@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(Rigidbody2D))]
-public class PlayerMove : MonoBehaviour
+public class PlayerMove : MonoBehaviour, IPausable
 {
     [Header("Speed")]
     [SerializeField] private Speed speed = new();

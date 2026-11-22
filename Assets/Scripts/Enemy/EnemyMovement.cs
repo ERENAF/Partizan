@@ -5,7 +5,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(Seeker))]
-public class EnemyMovement : MonoBehaviour
+public class EnemyMovement : MonoBehaviour, IPausable
 {
     [Header("Movement")]
     [SerializeField, Min(0f)]

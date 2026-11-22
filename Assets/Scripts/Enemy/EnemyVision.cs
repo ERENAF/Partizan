@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class EnemyVision : MonoBehaviour
+public class EnemyVision : MonoBehaviour, IPausable
 {
     [Header("Vision")]
     [SerializeField, Min(0f)] private float viewDistance = 8f;

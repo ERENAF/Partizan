@@ -1,7 +1,7 @@
 using Unity.IO.LowLevel.Unsafe;
 using UnityEngine;
 
-public class Rotation : MonoBehaviour
+public class Rotation : MonoBehaviour,IPausable
 {
     protected virtual float Rotate(Vector2 point, Vector2 target)
     {
