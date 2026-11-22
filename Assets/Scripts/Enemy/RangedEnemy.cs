@@ -63,10 +63,10 @@ public class RangeEnemy : EnemyAI
             attackTimer - Time.deltaTime
         );
 
-        if (currentState != State.Chase &&
-            currentState != State.Aim)
+        if (currentState == State.Patrol)
         {
-            movement.Stop();
+            RotateTowardsMovement();
+
             aimProgress = 0f;
             return;
         }
@@ -254,10 +254,11 @@ public class RangeEnemy : EnemyAI
 
     protected override void ForgetPlayer()
     {
-        base.ForgetPlayer();
+        movement.Stop();
 
         aimProgress = 0f;
-        movement.Stop();
+
+        base.ForgetPlayer();
     }
 
     private void OnDisable()

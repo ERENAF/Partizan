@@ -5,10 +5,12 @@ using UnityEngine;
 public class MeleeEnemy : EnemyAI
 {
     [Header("Movement")]
-    [SerializeField] private EnemyMovement movement;
+    [SerializeField]
+    private EnemyMovement movement;
 
     [Header("Attack")]
-    [SerializeField] private MeleeAttack meleeAttack = new();
+    [SerializeField]
+    private MeleeAttack meleeAttack = new();
 
     [SerializeField, Min(0f)]
     private float attackCooldown = 1f;
@@ -35,21 +37,33 @@ public class MeleeEnemy : EnemyAI
             attackTimer - Time.deltaTime
         );
 
-        if (currentState != State.Chase)
+        // 1. Патрулирование
+        if (currentState == State.Patrol)
         {
-            movement.Stop();
+            RotateTowardsMovement();
             return;
         }
+
+        // 2. Подозрение
+        if (currentState == State.Suspicious)
+        {
+            if (visible)
+                RotateTowards(player.position);
+
+            return;
+        }
+
+        // 3. Преследование
+        if (currentState != State.Chase)
+            return;
 
         Vector2 targetPosition = visible
             ? (Vector2)player.position
             : lastKnownPosition;
 
-        // Продолжаем смотреть на игрока
-        // или на его последнюю известную позицию.
         RotateTowards(targetPosition);
 
-        // Сначала проверяем возможность атаки.
+        // 4. Проверяем возможность атаки
         if (visible && attackTimer <= 0f)
         {
             Transform origin = orientation != null
@@ -60,30 +74,37 @@ public class MeleeEnemy : EnemyAI
                 origin,
                 out Collider2D target))
             {
-                Death death = target.GetComponentInParent<Death>();
-
-                if (death != null &&
-                    (death.transform == player ||
-                     death.transform.IsChildOf(player)))
+                if (target != null)
                 {
-                    movement.Stop();
+                    Death death =
+                        target.GetComponentInParent<Death>();
 
-                    attackTimer = attackCooldown;
-                    death.death();
-                    return;
+                    if (death != null &&
+                        (death.transform == player ||
+                         death.transform.IsChildOf(player)))
+                    {
+                        movement.Stop();
+
+                        attackTimer = attackCooldown;
+
+                        death.death();
+                        return;
+                    }
                 }
             }
         }
 
-        // Во время перезарядки или если атака
-        // не достаёт до игрока — продолжаем путь.
+        // 5. Продолжаем движение через A*
         movement.MoveTo(targetPosition);
     }
 
     protected override void ForgetPlayer()
     {
-        base.ForgetPlayer();
+        // Сначала останавливаем преследование
         movement.Stop();
+
+        // Затем запускаем патруль
+        base.ForgetPlayer();
     }
 
     private void OnDisable()

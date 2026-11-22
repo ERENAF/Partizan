@@ -28,6 +28,7 @@ public class EnemyMovement : MonoBehaviour, IPausable
     private int waypointIndex;
 
     private Vector2 destination;
+    private float currentStoppingDistance;
     private float repathTimer;
 
     private bool isMoving;
@@ -35,15 +36,38 @@ public class EnemyMovement : MonoBehaviour, IPausable
 
     public bool IsMoving => isMoving;
 
+    public Vector2 MoveDirection { get; private set; }
+    public bool HasReachedDestination =>
+        isMoving &&
+        Vector2.Distance(rb.position, destination)
+            <= currentStoppingDistance;
+
+    public Vector2 Destination => destination;
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         seeker = GetComponent<Seeker>();
+
+        currentStoppingDistance = stoppingDistance;
     }
 
     public void MoveTo(Vector2 target)
     {
+        MoveTo(target, stoppingDistance);
+    }
+
+    public void MoveTo(Vector2 target, float stopDistance)
+    {
+        stopDistance = Mathf.Max(0f, stopDistance);
+
+        if (isMoving &&
+            Vector2.Distance(destination, target) < 0.05f &&
+            Mathf.Abs(currentStoppingDistance - stopDistance) < 0.001f)
+            return;
+
         destination = target;
+        currentStoppingDistance = stopDistance;
 
         if (!isMoving)
         {
@@ -57,8 +81,7 @@ public class EnemyMovement : MonoBehaviour, IPausable
         isMoving = false;
         waypoints = null;
         waypointIndex = 0;
-
-        // Игнорируем результаты старых запросов.
+        MoveDirection = Vector2.zero;
         pathVersion++;
 
         if (rb != null)
@@ -95,6 +118,10 @@ public class EnemyMovement : MonoBehaviour, IPausable
         {
             waypoints = null;
             waypointIndex = 0;
+
+            Debug.LogWarning(
+                $"A* path error: {path.errorLog}"
+            );
             return;
         }
 
@@ -110,8 +137,7 @@ public class EnemyMovement : MonoBehaviour, IPausable
             return;
         }
 
-        if (Vector2.Distance(rb.position, destination)
-            <= stoppingDistance)
+        if (HasReachedDestination)
         {
             rb.linearVelocity = Vector2.zero;
             return;
@@ -141,11 +167,11 @@ public class EnemyMovement : MonoBehaviour, IPausable
         }
 
         Vector2 target = waypoints[waypointIndex];
-
         Vector2 direction = target - rb.position;
 
-        rb.linearVelocity =
-            direction.normalized * moveSpeed;
+        MoveDirection = direction.normalized;
+
+        rb.linearVelocity = MoveDirection * moveSpeed;
     }
 
     private void OnDisable()

@@ -15,7 +15,8 @@ public abstract class EnemyAI : Rotation
     [SerializeField] protected Transform player;
     [SerializeField] protected EnemyVision vision;
     [SerializeField] protected Transform orientation;
-
+    [SerializeField] protected EnemyPatrol patrol;
+    [SerializeField] protected EnemyMovement movement;
     [Header("Detection")]
     [SerializeField, Min(0f)]
     protected float detectionTime = 1.5f;
@@ -44,6 +45,30 @@ public abstract class EnemyAI : Rotation
 
         if (vision == null)
             vision = GetComponent<EnemyVision>();
+
+        if (patrol == null)
+            patrol = GetComponent<EnemyPatrol>();
+        if (movement == null)
+            movement = GetComponent<EnemyMovement>();
+    }
+    protected void RotateTowardsMovement()
+    {
+        if (movement == null)
+            return;
+
+        Vector2 direction = movement.MoveDirection;
+
+        if (direction.sqrMagnitude < 0.001f)
+            return;
+
+        RotateTowards(
+            (Vector2)orientation.position + direction
+        );
+    }
+
+    protected virtual void Start()
+    {
+        patrol?.StartPatrol();
     }
 
     protected virtual void Update()
@@ -67,12 +92,18 @@ public abstract class EnemyAI : Rotation
             if (currentState == State.Patrol ||
                 currentState == State.Suspicious)
             {
+                if (currentState == State.Patrol)
+                {
+                    currentState = State.Suspicious;
+                    patrol?.StopPatrol();
+                }
+
                 detectionProgress += Time.deltaTime;
-                currentState = State.Suspicious;
 
                 if (detectionProgress >= detectionTime)
                 {
                     detectionProgress = detectionTime;
+
                     OnPlayerDetected();
                 }
             }
@@ -84,6 +115,7 @@ public abstract class EnemyAI : Rotation
             if (currentState == State.Suspicious)
             {
                 currentState = State.Patrol;
+                patrol?.StartPatrol();
             }
 
             if (currentState == State.Chase ||
@@ -105,6 +137,8 @@ public abstract class EnemyAI : Rotation
 
         detectionProgress = 0f;
         lostTargetTimer = 0f;
+
+        patrol?.StartPatrol();
     }
 
     protected void RotateTowards(Vector2 targetPosition)
