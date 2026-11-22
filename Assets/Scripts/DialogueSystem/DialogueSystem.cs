@@ -89,6 +89,7 @@ public class DialogueSystem : MonoBehaviour
 {
     [Header("DialogueSettings")]
     public Dialogue dialogue;
+    [SerializeField] private DialogueUIAnimator uiAnimator;
     [Min(0)]public float speedTyping;
     [Header("UI")]
     public GameObject dialoguePanel;
@@ -97,6 +98,7 @@ public class DialogueSystem : MonoBehaviour
     public Image imageHero;
     public Button buttonNextLine;
     public Button buttonSkipDialogue;
+
 
     private Coroutine typingCoroutine;
     private bool isTyping;
@@ -127,7 +129,7 @@ public class DialogueSystem : MonoBehaviour
         isTyping = false;
 
         if (dialoguePanel != null)
-            dialoguePanel.SetActive(true);
+            uiAnimator.Show();;
         GamePauseManager.Instance.SetPause(true);
         ShowNextLine();
     }
@@ -246,7 +248,7 @@ public class DialogueSystem : MonoBehaviour
         isDialogueActive = false;
 
         if (dialoguePanel != null)
-            dialoguePanel.SetActive(false);
+            uiAnimator.Hide();;
 
         GamePauseManager.Instance.SetPause(false);
         Debug.Log("Диалог завершён.");

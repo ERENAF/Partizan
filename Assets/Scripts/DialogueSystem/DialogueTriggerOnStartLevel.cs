@@ -1,9 +1,12 @@
+using System.Collections;
 using UnityEngine;
 
 public class DialogueTriggerOnStartLevel : DialogueTrigger
 {
-    private void Start()
+    private IEnumerator Start()
     {
+        yield return new WaitForEndOfFrame();
+
         SetDialogue();
     }
 }
