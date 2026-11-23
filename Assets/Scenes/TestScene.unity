@@ -795,6 +795,30 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.InputSystem::UnityEngine.InputSystem.InputActionReference
   m_Asset: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_ActionId: 351f2ccd-1f9f-44bf-9bec-d62ac5c5f408
+--- !u!1 &1315329594 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5159356551941392923, guid: 8edabd27cdadb5e448a8fc7bb66f519b, type: 3}
+  m_PrefabInstance: {fileID: 4898976920548482315}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1315329604
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1315329594}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce026500a62ba0b44acb563e5468fb87, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyPatrol
+  patrolPoints:
+  - {fileID: 1822258749}
+  - {fileID: 154940486}
+  - {fileID: 522359144}
+  waitTime: 1.5
+  stoppingDistance: 0.5
+  loop: 1
 --- !u!114 &1379891521
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1626,6 +1650,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 512776468537355490, guid: 8edabd27cdadb5e448a8fc7bb66f519b, type: 3}
+      propertyPath: patrol
+      value: 
+      objectReference: {fileID: 1315329604}
+    - target: {fileID: 512776468537355490, guid: 8edabd27cdadb5e448a8fc7bb66f519b, type: 3}
       propertyPath: player
       value: 
       objectReference: {fileID: 1773353946}
@@ -1680,7 +1708,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5159356551941392923, guid: 8edabd27cdadb5e448a8fc7bb66f519b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1315329604}
   m_SourcePrefab: {fileID: 100100000, guid: 8edabd27cdadb5e448a8fc7bb66f519b, type: 3}
 --- !u!1001 &5511768868550905337
 PrefabInstance:
@@ -1702,6 +1733,34 @@ PrefabInstance:
       propertyPath: sprintAction
       value: 
       objectReference: {fileID: 1379891521}
+    - target: {fileID: 1505574835934264831, guid: df8a90b3a270c194d973f0b3b1b1fcc7, type: 3}
+      propertyPath: footstepClips.Array.size
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 1505574835934264831, guid: df8a90b3a270c194d973f0b3b1b1fcc7, type: 3}
+      propertyPath: 'footstepClips.Array.data[0]'
+      value: 
+      objectReference: {fileID: 8300000, guid: 1919b91c183dc5541aa67ad86ac05877, type: 3}
+    - target: {fileID: 1505574835934264831, guid: df8a90b3a270c194d973f0b3b1b1fcc7, type: 3}
+      propertyPath: 'footstepClips.Array.data[1]'
+      value: 
+      objectReference: {fileID: 8300000, guid: 4b4ad10fb954c20449a86006cb4513c8, type: 3}
+    - target: {fileID: 1505574835934264831, guid: df8a90b3a270c194d973f0b3b1b1fcc7, type: 3}
+      propertyPath: 'footstepClips.Array.data[2]'
+      value: 
+      objectReference: {fileID: 8300000, guid: 97132adced6b507428a3f41241e302ce, type: 3}
+    - target: {fileID: 1505574835934264831, guid: df8a90b3a270c194d973f0b3b1b1fcc7, type: 3}
+      propertyPath: 'footstepClips.Array.data[3]'
+      value: 
+      objectReference: {fileID: 8300000, guid: 72b22d097b2282b4ea7b3cc2099cbe37, type: 3}
+    - target: {fileID: 1505574835934264831, guid: df8a90b3a270c194d973f0b3b1b1fcc7, type: 3}
+      propertyPath: 'footstepClips.Array.data[4]'
+      value: 
+      objectReference: {fileID: 8300000, guid: c82cf7fcb1abe47459befaafcd25f75a, type: 3}
+    - target: {fileID: 1505574835934264831, guid: df8a90b3a270c194d973f0b3b1b1fcc7, type: 3}
+      propertyPath: 'footstepClips.Array.data[5]'
+      value: 
+      objectReference: {fileID: 8300000, guid: 982b621d892cf754aa80e2a6bd9a4948, type: 3}
     - target: {fileID: 1970554691559387481, guid: df8a90b3a270c194d973f0b3b1b1fcc7, type: 3}
       propertyPath: playerCamera
       value: 
@@ -1750,6 +1809,30 @@ PrefabInstance:
       propertyPath: attackAction
       value: 
       objectReference: {fileID: 987936061}
+    - target: {fileID: 5960450610858793742, guid: df8a90b3a270c194d973f0b3b1b1fcc7, type: 3}
+      propertyPath: meleeAttack.attackVolume
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5960450610858793742, guid: df8a90b3a270c194d973f0b3b1b1fcc7, type: 3}
+      propertyPath: meleeAttack.hitSounds.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5960450610858793742, guid: df8a90b3a270c194d973f0b3b1b1fcc7, type: 3}
+      propertyPath: meleeAttack.attackSounds.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5960450610858793742, guid: df8a90b3a270c194d973f0b3b1b1fcc7, type: 3}
+      propertyPath: 'meleeAttack.hitSounds.Array.data[0]'
+      value: 
+      objectReference: {fileID: 8300000, guid: 6533d1b4c0cde344092ff786bf333b8a, type: 3}
+    - target: {fileID: 5960450610858793742, guid: df8a90b3a270c194d973f0b3b1b1fcc7, type: 3}
+      propertyPath: 'meleeAttack.attackSounds.Array.data[0]'
+      value: 
+      objectReference: {fileID: 8300000, guid: 6204b275db4ae844380ccd9e6dd72fc5, type: 3}
+    - target: {fileID: 5960450610858793742, guid: df8a90b3a270c194d973f0b3b1b1fcc7, type: 3}
+      propertyPath: 'meleeAttack.attackSounds.Array.data[1]'
+      value: 
+      objectReference: {fileID: 8300000, guid: 6533d1b4c0cde344092ff786bf333b8a, type: 3}
     - target: {fileID: 8427506831907674734, guid: df8a90b3a270c194d973f0b3b1b1fcc7, type: 3}
       propertyPath: m_Name
       value: Player
@@ -1818,6 +1901,10 @@ PrefabInstance:
     - target: {fileID: 6644815715650812676, guid: 3315b7c322656ca48a44d8c0cdd7e718, type: 3}
       propertyPath: m_Name
       value: rangeEnemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 6644815715650812676, guid: 3315b7c322656ca48a44d8c0cdd7e718, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

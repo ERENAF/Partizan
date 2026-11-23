@@ -4,10 +4,6 @@ using UnityEngine;
 [RequireComponent(typeof(EnemyMovement))]
 public class RangeEnemy : EnemyAI
 {
-    [Header("Movement")]
-    [SerializeField]
-    private EnemyMovement movement;
-
     [SerializeField, Min(0f)]
     private float preferredDistance = 6f;
 

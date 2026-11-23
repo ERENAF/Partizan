@@ -4,9 +4,6 @@ using UnityEngine;
 [RequireComponent(typeof(EnemyMovement))]
 public class MeleeEnemy : EnemyAI
 {
-    [Header("Movement")]
-    [SerializeField]
-    private EnemyMovement movement;
 
     [Header("Attack")]
     [SerializeField]
@@ -81,7 +78,7 @@ public class MeleeEnemy : EnemyAI
 
                     if (death != null &&
                         (death.transform == player ||
-                         death.transform.IsChildOf(player)))
+                        death.transform.IsChildOf(player)))
                     {
                         movement.Stop();
 
